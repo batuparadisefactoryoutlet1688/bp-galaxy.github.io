@@ -1,0 +1,173 @@
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Pendaftaran</title>
+
+<link rel="stylesheet" href="css/style.css">
+<script src="js/config.js"></script>
+
+</head>
+
+<body>
+
+<br>
+
+<img src="images/logo.png" class="logo">
+
+<h3 class="title">
+GALAXY PASSPORT
+</h3>
+
+<div class="container">
+
+    <h2 class="title">
+        👤 PENDAFTARAN
+    </h2>
+
+    <div class="card">
+
+        <input type="text"
+               id="passport"
+               placeholder="No Passport"
+               onkeyup="cekPassport()">
+
+        <input type="text"
+               id="nama"
+               placeholder="Nama">
+
+        <input type="text"
+               id="hp"
+               placeholder="No HP">
+
+        <div id="info"></div>
+
+        <br>
+
+        <button class="btn-blue"
+                onclick="simpan()">
+
+            SIMPAN
+
+        </button>
+
+        <br><br>
+
+        <button class="btn-red"
+                onclick="location='dashboard.html'">
+
+            KEMBALI
+
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+if(!localStorage.getItem("username")){
+    window.location="index.html";
+}
+
+function cekPassport(){
+
+    let passport=
+    document.getElementById("passport").value;
+
+    if(passport=="") return;
+
+    fetch(
+        API_URL +
+        "?action=search&passport=" +
+        passport
+    )
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            document.getElementById("info").innerHTML=
+            "❌ Passport sudah terdaftar<br><br>" +
+            data.nama +
+            "<br>" +
+            data.hp;
+
+        }else{
+
+            document.getElementById("info").innerHTML=
+            "✅ Passport tersedia";
+
+        }
+
+    });
+
+}
+
+function simpan(){
+
+    let passport=
+    document.getElementById("passport").value;
+
+    let nama=
+    document.getElementById("nama").value;
+
+    let hp=
+    document.getElementById("hp").value;
+
+    if(passport==""){
+        alert("Passport wajib diisi");
+        return;
+    }
+
+    if(nama==""){
+        alert("Nama wajib diisi");
+        return;
+    }
+
+    if(hp==""){
+        alert("HP wajib diisi");
+        return;
+    }
+
+    fetch(
+        API_URL +
+        "?action=register" +
+        "&passport=" + passport +
+        "&nama=" + encodeURIComponent(nama) +
+        "&hp=" + hp
+    )
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            alert("Member berhasil ditambahkan");
+
+            location.reload();
+
+        }else{
+
+            alert(data.message);
+
+        }
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>
+```

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Report Voucher</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="js/config.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+
+.voucher {
+    width: 170px;
+    height: 200px;
+    border: 2px solid #00bfff;
+    margin: 5px;
+    padding: 8px;
+    display: inline-block;
+    font-size: 10px;
+    position: relative;
+    background: linear-gradient(135deg, #001a33, #003366);
+    color: white;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.voucher h3 {
+    font-size: 12px;
+    margin: 0;
+    color: #00bfff;
+    text-align: center;
+}
+
+.stars {
+    text-align: center;
+    color: gold;
+    font-size: 12px;
+}
+
+.small {
+    font-size: 9px;
+}
+
+.print-btn {
+    background: #00bfff;
+    color: white;
+    padding: 10px;
+    border: none;
+    margin: 5px;
+    border-radius: 6px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<br>
+
+<img src="images/logo.png" class="logo">
+
+<h3 class="title">GALAXY PASSPORT</h3>
+
+<div class="container">
+
+<h2 class="title">🎟 VOUCHER REPORT</h2>
+
+<div class="card">
+
+<button class="print-btn" onclick="generate(8)">8 ⭐</button>
+<button class="print-btn" onclick="generate(7)">7 ⭐</button>
+<button class="print-btn" onclick="generate(6)">6 ⭐</button>
+<button class="print-btn" onclick="generate(5)">5 ⭐</button>
+<button class="print-btn" onclick="generate(4)">4 ⭐</button>
+<button class="print-btn" onclick="generate(3)">3 ⭐</button>
+<button class="print-btn" onclick="generate(2)">2 ⭐</button>
+<button class="print-btn" onclick="generate(1)">1 ⭐</button>
+
+<br><br>
+
+<button class="btn-red" onclick="location='dashboard.html'">
+KEMBALI
+</button>
+
+</div>
+
+<br>
+
+<div id="area"></div>
+
+</div>
+
+<script>
+
+async function generate(total){
+
+    const res = await fetch(
+        API_URL + "?action=voucher&total=" + total
+    );
+
+    const data = await res.json();
+
+    let html = "";
+
+    data.forEach(m => {
+
+        let stars = "";
+
+        for(let i=1;i<=8;i++){
+            stars += (i <= total ? "⭐" : "⚪");
+        }
+
+        html += `
+        <div class="voucher">
+
+            <h3>🚀 GALAXY PASSPORT</h3>
+
+            <div class="small">
+            16TH ANNIVERSARY<br>
+            BATU PARADISE
+            </div>
+
+            <hr>
+
+            <b>${m.passport}</b><br>
+            ${m.nama}<br>
+            ${m.hp}
+
+            <br><br>
+
+            <div class="stars">${stars}</div>
+
+            <br>
+
+            <div class="small">
+            Hubungi saat pengundian
+            </div>
+
+        </div>
+        `;
+
+    });
+
+    document.getElementById("area").innerHTML = html;
+
+}
+
+</script>
+
+</body>
+
+</html>

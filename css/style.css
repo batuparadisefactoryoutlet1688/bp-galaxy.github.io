@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap');
+
+body{
+    margin:0;
+    padding:0;
+    min-height:100vh;
+    font-family:'Poppins',sans-serif;
+    color:white;
+    background:
+    radial-gradient(circle at top left,#284b9b 0%,#071a52 50%),
+    linear-gradient(135deg,#071a52,#102c65,#0d1635);
+    background-attachment:fixed;
+}
+
+body:before{
+    content:"";
+    position:fixed;
+    width:100%;
+    height:100%;
+    background-image:
+    radial-gradient(white 1px,transparent 1px);
+    background-size:35px 35px;
+    opacity:0.15;
+    pointer-events:none;
+}
+
+.title{
+    font-family:'Orbitron',sans-serif;
+    text-align:center;
+    letter-spacing:2px;
+}
+
+.subtitle{
+    text-align:center;
+}
+
+.logo{
+    width:120px;
+    display:block;
+    margin:auto;
+}
+
+.container{
+    width:92%;
+    max-width:500px;
+    margin:auto;
+}
+
+.card{
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(15px);
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 0 30px rgba(255,255,255,0.1);
+}
+
+input{
+    width:100%;
+    padding:15px;
+    margin-bottom:15px;
+    border:none;
+    border-radius:15px;
+    box-sizing:border-box;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:15px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.03);
+}
+
+.btn-red{
+    background:#e53935;
+    color:white;
+}
+
+.btn-blue{
+    background:#1976d2;
+    color:white;
+}
+
+.dashboard-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.dashboard-card{
+    background:rgba(255,255,255,0.12);
+    padding:25px;
+    border-radius:20px;
+    text-align:center;
+    font-size:18px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 25px rgba(255,255,255,0.2);
+}
+
+.stat-card{
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.stat-number{
+    font-size:35px;
+    font-weight:bold;
+}
+
+.stars{
+    font-size:32px;
+    text-align:center;
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+
+0%{
+    transform:scale(1);
+}
+
+50%{
+    transform:scale(1.05);
+}
+
+100%{
+    transform:scale(1);
+}
+
+}
+
+.splash{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:#071a52;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+.hidden{
+    display:none;
+}
+
+@media(max-width:600px){
+
+.dashboard-grid{
+    grid-template-columns:1fr;
+}
+
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Stamp Normal</title>
+
+<link rel="stylesheet" href="css/style.css">
+<script src="js/config.js"></script>
+
+</head>
+
+<body>
+
+<br>
+
+<img src="images/logo.png" class="logo">
+
+<h3 class="title">
+GALAXY PASSPORT
+</h3>
+
+<div class="container">
+
+    <h2 class="title">
+        ⭐ STAMP NORMAL
+    </h2>
+
+    <div class="card">
+
+        <input type="text"
+               id="passport"
+               placeholder="No Passport"
+               onkeyup="cari()">
+
+        <h3 id="nama"></h3>
+
+        <p id="hp"></p>
+
+        <div class="stars"
+             id="stars">
+
+            ⚪ ⚪ ⚪ ⚪ ⚪ ⚪ ⚪ ⚪
+
+        </div>
+
+        <br>
+
+        <button class="btn-blue"
+                onclick="beriStamp()">
+
+            BERIKAN STAMP
+
+        </button>
+
+        <br><br>
+
+        <button class="btn-red"
+                onclick="location='dashboard.html'">
+
+            KEMBALI
+
+        </button>
+
+    </div>
+
+</div>
+
+<script>
+
+if(!localStorage.getItem("username")){
+    window.location="index.html";
+}
+
+function cari(){
+
+    let passport =
+    document.getElementById("passport").value;
+
+    if(passport=="") return;
+
+    fetch(
+        API_URL +
+        "?action=search&passport=" +
+        passport
+    )
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            document.getElementById("nama").innerHTML =
+            data.nama;
+
+            document.getElementById("hp").innerHTML =
+            data.hp;
+
+            let s = "";
+
+            for(let i=1;i<=8;i++){
+
+                if(data["stamp"+i]==1){
+
+                    s += "⭐ ";
+
+                }else{
+
+                    s += "⚪ ";
+
+                }
+
+            }
+
+            document.getElementById("stars").innerHTML =
+            s;
+
+        }
+
+    });
+
+}
+
+function beriStamp(){
+
+    let passport =
+    document.getElementById("passport").value;
+
+    let petugas =
+    localStorage.getItem("username");
+
+    fetch(
+        API_URL +
+        "?action=stamp" +
+        "&passport=" + passport +
+        "&petugas=" + petugas
+    )
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        alert(data.message);
+
+        cari();
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>

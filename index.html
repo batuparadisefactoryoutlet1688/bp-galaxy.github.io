@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>BP GALAXY</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div id="splash" class="splash">
+
+    <img src="images/logo.png" class="logo">
+
+    <h1 class="title">
+        GALAXY PASSPORT
+    </h1>
+
+    <h3 class="subtitle">
+        16TH ANNIVERSARY
+    </h3>
+
+    <h3 class="subtitle">
+        BATU PARADISE
+    </h3>
+
+    <p>Loading Mission...</p>
+
+</div>
+
+<div id="login" class="container hidden">
+
+    <br><br><br>
+
+    <div class="card">
+
+        <h2 class="title">
+            MISSION LOGIN
+        </h2>
+
+        <input type="text"
+               id="username"
+               placeholder="Username">
+
+        <input type="password"
+               id="password"
+               placeholder="Password">
+
+        <button class="btn-red"
+                onclick="login()">
+            LOGIN
+        </button>
+
+    </div>
+
+</div>
+
+<script src="js/config.js"></script>
+
+<script>
+
+setTimeout(() => {
+
+    document.getElementById("splash").style.display = "none";
+    document.getElementById("login").classList.remove("hidden");
+
+},2000);
+
+if(localStorage.getItem("username")){
+    window.location = "dashboard.html";
+}
+
+function login(){
+
+    const user =
+        document.getElementById("username").value;
+
+    const pass =
+        document.getElementById("password").value;
+
+    fetch(API_URL +
+        "?action=login&password=" + pass)
+
+    .then(r=>r.json())
+
+    .then(data=>{
+
+        if(data.success){
+
+            localStorage.setItem(
+                "username",
+                user
+            );
+
+            window.location =
+                "dashboard.html";
+
+        }else{
+
+            alert("Password salah");
+
+        }
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
