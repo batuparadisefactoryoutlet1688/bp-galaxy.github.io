@@ -100,7 +100,12 @@ KEMBALI
 
 <script>
 
+let currentData = [];
+let currentTotal = 0;
+
 async function generate(total){
+
+    currentTotal = total;
 
     const res = await fetch(
         API_URL + "?action=voucher&total=" + total
@@ -108,7 +113,20 @@ async function generate(total){
 
     const data = await res.json();
 
+    currentData = data;
+
     let html = "";
+
+    html += `
+    <div style="text-align:center;margin-bottom:15px;">
+        <button class="print-btn" onclick="downloadPDF()">
+            📄 DOWNLOAD PDF ${total} ⭐
+        </button>
+        <div style="margin-top:8px;color:white;">
+            Total Peserta : ${data.length}
+        </div>
+    </div>
+    `;
 
     data.forEach(m => {
 
@@ -150,6 +168,100 @@ async function generate(total){
     });
 
     document.getElementById("area").innerHTML = html;
+
+}
+
+function downloadPDF(){
+
+    if(currentData.length === 0){
+        alert("Tidak ada data");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+
+    const doc = new jsPDF({
+        orientation: "portrait",
+        unit: "mm",
+        format: [330,210]
+    });
+
+    const voucherWidth = 50;
+    const voucherHeight = 60;
+
+    const startX = 5;
+    const startY = 5;
+
+    let x = startX;
+    let y = startY;
+
+    let col = 0;
+    let row = 0;
+
+    currentData.forEach((m,index)=>{
+
+        doc.setLineWidth(0.5);
+        doc.rect(x,y,voucherWidth,voucherHeight);
+
+        doc.setFontSize(11);
+        doc.text("GALAXY PASSPORT",x+4,y+8);
+
+        doc.setFontSize(7);
+        doc.text("16TH ANNIVERSARY",x+4,y+14);
+        doc.text("BATU PARADISE",x+4,y+18);
+
+        doc.line(x+2,y+22,x+48,y+22);
+
+        doc.setFontSize(8);
+
+        doc.text("Passport",x+3,y+30);
+        doc.text(String(m.passport),x+3,y+35);
+
+        doc.text("Nama",x+3,y+43);
+        doc.text(String(m.nama),x+3,y+48);
+
+        doc.text("HP",x+3,y+56);
+        doc.text(String(m.hp),x+3,y+61);
+
+        let stars = "";
+
+        for(let i=1;i<=8;i++){
+            stars += (i <= currentTotal ? "*" : "o");
+        }
+
+        doc.text(stars,x+3,y+68);
+
+        col++;
+
+        if(col >= 4){
+            col = 0;
+            row++;
+
+            x = startX;
+            y += 65;
+        } else {
+            x += 52;
+        }
+
+        if(row >= 5){
+
+            if(index < currentData.length - 1){
+                doc.addPage();
+            }
+
+            x = startX;
+            y = startY;
+            col = 0;
+            row = 0;
+        }
+
+    });
+
+    doc.save(
+        "Voucher_" +
+        currentTotal +
+        "_Star.pdf"
+    );
 
 }
 
