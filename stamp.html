@@ -4,11 +4,14 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport"
+content="width=device-width, initial-scale=1">
 
 <title>Stamp Normal</title>
 
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet"
+href="css/style.css">
+
 <script src="js/config.js"></script>
 
 </head>
@@ -33,12 +36,26 @@ GALAXY PASSPORT
 
         <input type="text"
                id="passport"
-               placeholder="No Passport"
-               onkeyup="cari()">
+               placeholder="No Passport">
 
-        <h3 id="nama"></h3>
+        <br><br>
 
-        <p id="hp"></p>
+        <button class="btn-blue"
+                onclick="cari()">
+
+            CARI MEMBER
+
+        </button>
+
+        <br><br>
+
+        <h3 id="nama">
+            -
+        </h3>
+
+        <p id="hp">
+            -
+        </p>
 
         <div class="stars"
              id="stars">
@@ -72,15 +89,38 @@ GALAXY PASSPORT
 <script>
 
 if(!localStorage.getItem("username")){
-    window.location="index.html";
+
+    window.location = "index.html";
+
 }
+
+let ditemukan = false;
 
 function cari(){
 
     let passport =
-    document.getElementById("passport").value;
+    document.getElementById("passport")
+    .value.trim();
 
-    if(passport=="") return;
+    if(passport==""){
+
+        alert("Masukkan nomor passport.");
+
+        return;
+
+    }
+
+    ditemukan = false;
+
+    document.getElementById("nama")
+    .innerHTML = "Mencari...";
+
+    document.getElementById("hp")
+    .innerHTML = "";
+
+    document.getElementById("stars")
+    .innerHTML =
+    "⚪ ⚪ ⚪ ⚪ ⚪ ⚪ ⚪ ⚪";
 
     fetch(
         API_URL +
@@ -94,11 +134,13 @@ function cari(){
 
         if(data.success){
 
-            document.getElementById("nama").innerHTML =
-            data.nama;
+            ditemukan = true;
 
-            document.getElementById("hp").innerHTML =
-            data.hp;
+            document.getElementById("nama")
+            .innerHTML = data.nama;
+
+            document.getElementById("hp")
+            .innerHTML = data.hp;
 
             let s = "";
 
@@ -116,8 +158,21 @@ function cari(){
 
             }
 
-            document.getElementById("stars").innerHTML =
-            s;
+            document.getElementById("stars")
+            .innerHTML = s;
+
+        }else{
+
+            document.getElementById("nama")
+            .innerHTML =
+            "Member tidak ditemukan";
+
+            document.getElementById("hp")
+            .innerHTML = "";
+
+            document.getElementById("stars")
+            .innerHTML =
+            "⚪ ⚪ ⚪ ⚪ ⚪ ⚪ ⚪ ⚪";
 
         }
 
@@ -127,8 +182,19 @@ function cari(){
 
 function beriStamp(){
 
+    if(!ditemukan){
+
+        alert(
+            "Cari member terlebih dahulu."
+        );
+
+        return;
+
+    }
+
     let passport =
-    document.getElementById("passport").value;
+    document.getElementById("passport")
+    .value.trim();
 
     let petugas =
     localStorage.getItem("username");
@@ -155,4 +221,5 @@ function beriStamp(){
 </script>
 
 </body>
+
 </html>
