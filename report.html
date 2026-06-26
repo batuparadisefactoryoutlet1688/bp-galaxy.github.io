@@ -7,7 +7,7 @@
 <meta name="viewport"
 content="width=device-width,initial-scale=1">
 
-<title>Report</title>
+<title>Report Voucher</title>
 
 <link rel="stylesheet"
 href="css/style.css">
@@ -16,10 +16,12 @@ href="css/style.css">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
 <style>
 
 .report-card{
-    background:#0b1b3a;
+    background:#08162f;
     border-radius:15px;
     padding:20px;
     text-align:center;
@@ -57,6 +59,109 @@ href="css/style.css">
     font-size:20px;
 }
 
+#printArea{
+
+    position:absolute;
+    left:-9999px;
+
+    width:210mm;
+    height:330mm;
+
+    background:white;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(4,50mm);
+
+    grid-template-rows:
+    repeat(5,60mm);
+
+    padding-top:15mm;
+
+    padding-left:5mm;
+
+    box-sizing:border-box;
+}
+
+.voucher{
+
+    width:50mm;
+    height:60mm;
+
+    border:1px solid black;
+
+    box-sizing:border-box;
+
+    padding:4mm;
+
+    background:
+    linear-gradient(
+    180deg,
+    #001c44,
+    #003f88,
+    #b1002d);
+
+    color:white;
+
+    position:relative;
+
+    overflow:hidden;
+
+    font-family:Arial;
+}
+
+.voucher-logo{
+
+    width:16mm;
+
+    display:block;
+
+    margin:auto;
+}
+
+.voucher-title{
+
+    text-align:center;
+
+    font-size:9px;
+
+    font-weight:bold;
+}
+
+.voucher-sub{
+
+    text-align:center;
+
+    font-size:6px;
+
+    margin-bottom:4px;
+}
+
+.info{
+
+    font-size:8px;
+
+    line-height:10px;
+}
+
+.stamp{
+
+    position:absolute;
+
+    bottom:5mm;
+
+    left:0;
+
+    width:100%;
+
+    text-align:center;
+
+    font-size:18px;
+
+    font-weight:bold;
+}
+
 </style>
 
 </head>
@@ -65,7 +170,8 @@ href="css/style.css">
 
 <br>
 
-<img src="images/logo.png" class="logo">
+<img src="images/logo.png"
+class="logo">
 
 <h3 class="title">
 GALAXY PASSPORT
@@ -107,6 +213,8 @@ KEMBALI
 </button>
 
 </div>
+
+<div id="printArea"></div>
 
 <script>
 
@@ -157,7 +265,7 @@ async function loadData(stamp){
     `;
 }
 
-function downloadPDF(){
+async function downloadPDF(){
 
     if(currentData.length==0){
 
@@ -173,7 +281,7 @@ function downloadPDF(){
     const doc =
     new jsPDF({
 
-        orientation:"portrait",
+        orientation:"landscape",
 
         unit:"mm",
 
@@ -181,144 +289,125 @@ function downloadPDF(){
 
     });
 
-    let x = 5;
-    let y = 15;
+    let index = 0;
 
-    let col = 0;
-    let row = 0;
+    while(index < currentData.length){
 
-    currentData.forEach((m,index)=>{
+        let html = "";
 
-        doc.setDrawColor(0);
-        doc.rect(x,y,50,60);
+        for(let i=0;i<20;i++){
 
-        doc.setFontSize(10);
-        doc.text(
-        "GALAXY PASSPORT",
-        x+5,
-        y+8
-        );
+            if(index >= currentData.length)
+            break;
 
-        doc.setFontSize(7);
+            let m =
+            currentData[index];
 
-        doc.text(
-        "16TH ANNIVERSARY",
-        x+8,
-        y+13
-        );
+            html += `
 
-        doc.text(
-        "BATU PARADISE",
-        x+10,
-        y+17
-        );
+            <div class="voucher">
 
-        doc.line(
-        x+2,
-        y+20,
-        x+48,
-        y+20
-        );
+                <img src="images/logo.png"
+                class="voucher-logo">
 
-        doc.setFontSize(8);
+                <div class="voucher-title">
 
-        doc.text(
-        "Passport:",
-        x+3,
-        y+28
-        );
+                GALAXY PASSPORT
 
-        doc.text(
-        String(m.passport),
-        x+20,
-        y+28
-        );
+                </div>
 
-        let nama =
-        String(m.nama);
+                <div class="voucher-sub">
 
-        nama =
-        doc.splitTextToSize(
-        nama,
-        28
-        );
+                16TH ANNIVERSARY<br>
+                BATU PARADISE
 
-        if(nama.length > 2){
+                </div>
 
-            nama =
-            nama.slice(0,2);
+                <hr>
 
-        }
+                <div class="info">
 
-        doc.text(
-        "Nama:",
-        x+3,
-        y+37
-        );
+                Passport:
+                ${m.passport}
 
-        doc.text(
-        nama,
-        x+20,
-        y+37
-        );
+                <br><br>
 
-        doc.text(
-        "HP:",
-        x+3,
-        y+50
-        );
+                Nama:
+                ${m.nama}
 
-        doc.text(
-        String(m.hp),
-        x+20,
-        y+50
-        );
+                <br><br>
 
-        doc.setFontSize(18);
+                HP:
+                ${m.hp}
 
-        doc.text(
-        currentStamp +
-        " STAMP",
-        x+10,
-        y+57
-        );
+                </div>
 
-        col++;
+                <div class="stamp">
 
-        if(col>=4){
+                ${currentStamp}
+                STAMP
 
-            col = 0;
+                </div>
 
-            row++;
+            </div>
 
-            x = 5;
+            `;
 
-            y += 60;
-
-        }else{
-
-            x += 50;
+            index++;
 
         }
 
-        if(row>=5){
+        document.getElementById(
+        "printArea"
+        ).innerHTML = html;
 
-            if(index <
-            currentData.length-1){
+        await new Promise(
+        r => setTimeout(r,300)
+        );
 
-                doc.addPage();
+        const canvas =
+        await html2canvas(
 
-            }
+        document.getElementById(
+        "printArea"
+        ),
 
-            row = 0;
-            col = 0;
+        {
+            scale:2
+        }
 
-            x = 5;
-            y = 15;
+        );
+
+        const img =
+        canvas.toDataURL(
+        "image/jpeg",
+        1
+        );
+
+        doc.addImage(
+
+        img,
+
+        "JPEG",
+
+        0,
+
+        0,
+
+        330,
+
+        210
+
+        );
+
+        if(index <
+        currentData.length){
+
+            doc.addPage();
 
         }
 
-    });
+    }
 
     doc.save(
 
