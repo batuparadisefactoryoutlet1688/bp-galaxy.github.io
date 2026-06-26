@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html>
 
@@ -13,7 +12,54 @@ content="width=device-width, initial-scale=1">
 <link rel="stylesheet"
 href="css/style.css">
 
-<script src="js/config.js"></script>
+<style>
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.dashboard-card{
+    background:rgba(255,255,255,0.08);
+    border-radius:20px;
+    padding:30px 15px;
+    text-align:center;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.1);
+    transition:0.3s;
+}
+
+.dashboard-card:hover{
+    transform:scale(1.03);
+}
+
+.stat{
+    text-align:left;
+    line-height:30px;
+}
+
+.big{
+    font-size:30px;
+    font-weight:bold;
+}
+
+.line{
+    border-top:1px solid rgba(255,255,255,0.3);
+    margin:15px 0;
+}
+
+@media(max-width:600px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -34,77 +80,15 @@ GALAXY PASSPORT
 Halo <span id="petugas"></span> 🚀
 </h2>
 
-<div class="card">
-
-<div class="stat-row">
-Member :
-<span id="member">0</span>
-</div>
-
-<hr>
-
-<div class="stat-row">
-⭐⭐⭐⭐⭐⭐⭐⭐ :
-<span id="stamp8">0</span>
-</div>
-
-<div class="stat-row">
-⭐⭐⭐⭐⭐⭐⭐⚪ :
-<span id="stamp7">0</span>
-</div>
-
-<div class="stat-row">
-⭐⭐⭐⭐⭐⭐⚪⚪ :
-<span id="stamp6">0</span>
-</div>
-
-<div class="stat-row">
-⭐⭐⭐⭐⭐⚪⚪⚪ :
-<span id="stamp5">0</span>
-</div>
-
-<div class="stat-row">
-⭐⭐⭐⭐⚪⚪⚪⚪ :
-<span id="stamp4">0</span>
-</div>
-
-<div class="stat-row">
-⭐⭐⭐⚪⚪⚪⚪⚪ :
-<span id="stamp3">0</span>
-</div>
-
-<div class="stat-row">
-⭐⭐⚪⚪⚪⚪⚪⚪ :
-<span id="stamp2">0</span>
-</div>
-
-<div class="stat-row">
-⭐⚪⚪⚪⚪⚪⚪⚪ :
-<span id="stamp1">0</span>
-</div>
-
-<div class="stat-row">
-⚪⚪⚪⚪⚪⚪⚪⚪ :
-<span id="stamp0">0</span>
-</div>
-
-<hr>
-
-<div class="stat-row">
-Belum Lengkap :
-<span id="belum">0</span>
-</div>
-
-</div>
-
-<br>
-
-<div class="dashboard-grid">
+<div class="grid">
 
 <div class="dashboard-card"
 onclick="location='register.html'">
 
-👤<br><br>
+👤
+
+<br><br>
+
 PENDAFTARAN
 
 </div>
@@ -112,7 +96,10 @@ PENDAFTARAN
 <div class="dashboard-card"
 onclick="location='stamp.html'">
 
-⭐<br><br>
+⭐
+
+<br><br>
+
 STAMP NORMAL
 
 </div>
@@ -120,7 +107,10 @@ STAMP NORMAL
 <div class="dashboard-card"
 onclick="location='cheating.html'">
 
-🎮<br><br>
+🎮
+
+<br><br>
+
 CHEATING DAY
 
 </div>
@@ -128,7 +118,10 @@ CHEATING DAY
 <div class="dashboard-card"
 onclick="location='report.html'">
 
-🎁<br><br>
+🎟
+
+<br><br>
+
 REPORT
 
 </div>
@@ -144,53 +137,180 @@ LOGOUT
 
 </button>
 
+<br><br>
+
+<div class="card stat">
+
+<div class="big">
+
+Member :
+<span id="member">0</span>
+
 </div>
+
+<div class="line"></div>
+
+<div>
+
+⭐⭐⭐⭐⭐⭐⭐⭐ :
+<span id="stamp8">0</span>
+
+</div>
+
+<div>
+
+⭐⭐⭐⭐⭐⭐⭐⚪ :
+<span id="stamp7">0</span>
+
+</div>
+
+<div>
+
+⭐⭐⭐⭐⭐⭐⚪⚪ :
+<span id="stamp6">0</span>
+
+</div>
+
+<div>
+
+⭐⭐⭐⭐⭐⚪⚪⚪ :
+<span id="stamp5">0</span>
+
+</div>
+
+<div>
+
+⭐⭐⭐⭐⚪⚪⚪⚪ :
+<span id="stamp4">0</span>
+
+</div>
+
+<div>
+
+⭐⭐⭐⚪⚪⚪⚪⚪ :
+<span id="stamp3">0</span>
+
+</div>
+
+<div>
+
+⭐⭐⚪⚪⚪⚪⚪⚪ :
+<span id="stamp2">0</span>
+
+</div>
+
+<div>
+
+⭐⚪⚪⚪⚪⚪⚪⚪ :
+<span id="stamp1">0</span>
+
+</div>
+
+<div class="line"></div>
+
+<div class="big">
+
+Belum Lengkap :
+<span id="belum">0</span>
+
+</div>
+
+</div>
+
+<br><br>
+
+</div>
+
+<script src="js/config.js"></script>
 
 <script>
 
 if(!localStorage.getItem("username")){
-    location="index.html";
+
+    window.location="index.html";
+
 }
 
-document.getElementById("petugas").innerHTML =
-localStorage.getItem("username");
+document.getElementById(
+    "petugas"
+).innerHTML =
+localStorage.getItem(
+    "username"
+);
 
 function logout(){
 
-    localStorage.removeItem("username");
+    localStorage.removeItem(
+        "username"
+    );
 
-    location="index.html";
+    window.location =
+    "index.html";
 
 }
 
 fetch(
     API_URL +
-    "?action=stats"
+    "?action=dashboard"
 )
 
 .then(r=>r.json())
 
 .then(data=>{
 
-    member.innerHTML = data.member;
+    document.getElementById(
+        "member"
+    ).innerHTML =
+    data.member;
 
-    stamp8.innerHTML = data.stamp8;
-    stamp7.innerHTML = data.stamp7;
-    stamp6.innerHTML = data.stamp6;
-    stamp5.innerHTML = data.stamp5;
-    stamp4.innerHTML = data.stamp4;
-    stamp3.innerHTML = data.stamp3;
-    stamp2.innerHTML = data.stamp2;
-    stamp1.innerHTML = data.stamp1;
-    stamp0.innerHTML = data.stamp0;
+    document.getElementById(
+        "stamp8"
+    ).innerHTML =
+    data.stamp8;
 
-    belum.innerHTML = data.belum;
+    document.getElementById(
+        "stamp7"
+    ).innerHTML =
+    data.stamp7;
+
+    document.getElementById(
+        "stamp6"
+    ).innerHTML =
+    data.stamp6;
+
+    document.getElementById(
+        "stamp5"
+    ).innerHTML =
+    data.stamp5;
+
+    document.getElementById(
+        "stamp4"
+    ).innerHTML =
+    data.stamp4;
+
+    document.getElementById(
+        "stamp3"
+    ).innerHTML =
+    data.stamp3;
+
+    document.getElementById(
+        "stamp2"
+    ).innerHTML =
+    data.stamp2;
+
+    document.getElementById(
+        "stamp1"
+    ).innerHTML =
+    data.stamp1;
+
+    document.getElementById(
+        "belum"
+    ).innerHTML =
+    data.belum;
 
 });
 
 </script>
 
 </body>
-
 </html>
-```
