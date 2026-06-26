@@ -17,15 +17,16 @@
     background:#0b1b3a;
     padding:15px;
     border-radius:10px;
-    margin-top:10px;
+    margin-top:15px;
     color:white;
+    text-align:center;
 }
 
 .grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
     gap:10px;
-    margin-top:15px;
+    margin-top:20px;
 }
 
 .btn-stamp{
@@ -34,6 +35,7 @@
     border:none;
     font-size:18px;
     cursor:pointer;
+    font-weight:bold;
 }
 
 .active{
@@ -42,8 +44,8 @@
 }
 
 .disabled{
-    background:#333;
-    color:#777;
+    background:#444;
+    color:#ccc;
 }
 
 </style>
@@ -56,27 +58,51 @@
 
 <img src="images/logo.png" class="logo">
 
-<h3 class="title">CHEATING DAY</h3>
+<h3 class="title">
+GALAXY PASSPORT
+</h3>
 
 <div class="container">
+
+<h2 class="title">
+🎮 CHEATING DAY
+</h2>
 
 <div class="card">
 
 <input type="text"
 id="passport"
-placeholder="Input Passport"
-onkeyup="loadMember()">
+placeholder="Input Passport">
 
-<div id="info" class="info-card">
-Masukkan passport untuk lihat data
+<br><br>
+
+<button class="btn-blue"
+onclick="loadMember()">
+
+CARI MEMBER
+
+</button>
+
+<div id="info"
+class="info-card">
+
+Masukkan nomor passport lalu tekan
+CARI MEMBER
+
 </div>
 
-<div id="grid" class="grid"></div>
+<div id="grid"
+class="grid">
+
+</div>
 
 <br>
 
-<button class="btn-red" onclick="location='dashboard.html'">
+<button class="btn-red"
+onclick="location='dashboard.html'">
+
 KEMBALI
+
 </button>
 
 </div>
@@ -85,40 +111,62 @@ KEMBALI
 
 <script>
 
-let currentData = null;
+let ditemukan = false;
 
 function loadMember(){
 
-let passport = document.getElementById("passport").value;
+let passport =
+document.getElementById("passport")
+.value.trim();
 
-if(passport.length < 3) return;
+if(passport==""){
 
-fetch(API_URL + "?action=search&passport=" + passport)
+    alert("Masukkan nomor passport.");
 
-.then(r => r.json())
-
-.then(data => {
-
-if(!data.success){
-
-document.getElementById("info").innerHTML =
-"❌ Member tidak ditemukan";
-
-document.getElementById("grid").innerHTML = "";
-
-return;
+    return;
 
 }
 
-currentData = data;
+ditemukan = false;
 
-document.getElementById("info").innerHTML = `
-<b>${data.nama}</b><br>
-${data.hp}<br>
-Stamp: ${data.total}/8
-`;
+document.getElementById("info").innerHTML =
+"Mencari member...";
 
-renderGrid(data);
+document.getElementById("grid").innerHTML =
+"";
+
+fetch(
+API_URL +
+"?action=search&passport=" +
+passport
+)
+
+.then(r=>r.json())
+
+.then(data=>{
+
+    if(!data.success){
+
+        document.getElementById("info")
+        .innerHTML =
+        "❌ Member tidak ditemukan";
+
+        return;
+
+    }
+
+    ditemukan = true;
+
+    document.getElementById("info")
+    .innerHTML =
+
+    "<b>" + data.nama + "</b><br>" +
+    data.hp + "<br><br>" +
+    "Stamp : " +
+    data.total +
+    " / 8";
+
+    renderGrid(data);
 
 });
 
@@ -130,48 +178,67 @@ let html = "";
 
 for(let i=1;i<=8;i++){
 
-let status = data["stamp"+i];
+    let status = data["stamp"+i];
 
-html += `
-<button class="btn-stamp ${status==1?'active':'disabled'}"
-onclick="setStamp(${i})">
+    html += `
 
-${status==1?'⭐':'⚪'} ${i}
+    <button
+    class="btn-stamp
+    ${status==1?'active':'disabled'}"
 
-</button>
-`;
+    onclick="setStamp(${i})">
+
+    ${status==1 ? "⭐" : "⚪"}
+
+    <br>
+
+    ${i}
+
+    </button>
+
+    `;
 
 }
 
-document.getElementById("grid").innerHTML = html;
+document.getElementById("grid")
+.innerHTML = html;
 
 }
 
 function setStamp(stamp){
 
-let passport = document.getElementById("passport").value;
+if(!ditemukan){
 
-fetch(API_URL +
+    alert("Cari member terlebih dahulu.");
+
+    return;
+
+}
+
+let passport =
+document.getElementById("passport")
+.value.trim();
+
+let petugas =
+localStorage.getItem("username");
+
+fetch(
+
+API_URL +
 "?action=cheating" +
 "&passport=" + passport +
 "&stamp=" + stamp +
-"&petugas=" + localStorage.getItem("username"))
+"&petugas=" + petugas
 
-.then(r => r.json())
+)
 
-.then(res => {
+.then(r=>r.json())
 
-if(res.success){
+.then(res=>{
 
-alert("Stamp " + stamp + " berhasil");
+    alert(res.message);
 
-loadMember();
-
-}else{
-
-alert(res.message);
-
-}
+    loadMember();
 
 });
 
