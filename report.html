@@ -4,11 +4,13 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
 
-<title>Report Voucher</title>
+<title>Report</title>
 
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet"
+href="css/style.css">
 
 <script src="js/config.js"></script>
 
@@ -16,45 +18,43 @@
 
 <style>
 
-.voucher {
-    width: 170px;
-    height: 200px;
-    border: 2px solid #00bfff;
-    margin: 5px;
-    padding: 8px;
-    display: inline-block;
-    font-size: 10px;
-    position: relative;
-    background: linear-gradient(135deg, #001a33, #003366);
-    color: white;
-    border-radius: 8px;
-    overflow: hidden;
+.report-card{
+    background:#0b1b3a;
+    border-radius:15px;
+    padding:20px;
+    text-align:center;
+    color:white;
+    margin-top:20px;
 }
 
-.voucher h3 {
-    font-size: 12px;
-    margin: 0;
-    color: #00bfff;
-    text-align: center;
+.filter{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
 }
 
-.stars {
-    text-align: center;
-    color: gold;
-    font-size: 12px;
+.filter button{
+    padding:15px;
+    border:none;
+    border-radius:10px;
+    background:#0d6efd;
+    color:white;
+    font-size:18px;
 }
 
-.small {
-    font-size: 9px;
+.big{
+    font-size:40px;
+    font-weight:bold;
 }
 
-.print-btn {
-    background: #00bfff;
-    color: white;
-    padding: 10px;
-    border: none;
-    margin: 5px;
-    border-radius: 6px;
+.download{
+    background:#00c853;
+    color:white;
+    border:none;
+    padding:15px;
+    border-radius:10px;
+    width:100%;
+    font-size:20px;
 }
 
 </style>
@@ -67,200 +67,265 @@
 
 <img src="images/logo.png" class="logo">
 
-<h3 class="title">GALAXY PASSPORT</h3>
+<h3 class="title">
+GALAXY PASSPORT
+</h3>
 
 <div class="container">
 
-<h2 class="title">🎟 VOUCHER REPORT</h2>
+<h2 class="title">
+🎟 REPORT VOUCHER
+</h2>
 
 <div class="card">
 
-<button class="print-btn" onclick="generate(8)">8 ⭐</button>
-<button class="print-btn" onclick="generate(7)">7 ⭐</button>
-<button class="print-btn" onclick="generate(6)">6 ⭐</button>
-<button class="print-btn" onclick="generate(5)">5 ⭐</button>
-<button class="print-btn" onclick="generate(4)">4 ⭐</button>
-<button class="print-btn" onclick="generate(3)">3 ⭐</button>
-<button class="print-btn" onclick="generate(2)">2 ⭐</button>
-<button class="print-btn" onclick="generate(1)">1 ⭐</button>
+<div class="filter">
 
-<br><br>
+<button onclick="loadData(8)">8⭐</button>
+<button onclick="loadData(7)">7⭐</button>
+<button onclick="loadData(6)">6⭐</button>
+<button onclick="loadData(5)">5⭐</button>
 
-<button class="btn-red" onclick="location='dashboard.html'">
-KEMBALI
-</button>
+<button onclick="loadData(4)">4⭐</button>
+<button onclick="loadData(3)">3⭐</button>
+<button onclick="loadData(2)">2⭐</button>
+<button onclick="loadData(1)">1⭐</button>
 
 </div>
 
+</div>
+
+<div id="hasil"></div>
+
 <br>
 
-<div id="area"></div>
+<button class="btn-red"
+onclick="location='dashboard.html'">
+
+KEMBALI
+
+</button>
 
 </div>
 
 <script>
 
 let currentData = [];
-let currentTotal = 0;
+let currentStamp = 0;
 
-async function generate(total){
+async function loadData(stamp){
 
-    currentTotal = total;
+    currentStamp = stamp;
 
-    const res = await fetch(
-        API_URL + "?action=voucher&total=" + total
+    const res =
+    await fetch(
+        API_URL +
+        "?action=voucher&total=" +
+        stamp
     );
 
-    const data = await res.json();
+    currentData =
+    await res.json();
 
-    currentData = data;
+    document.getElementById(
+        "hasil"
+    ).innerHTML = `
 
-    let html = "";
+    <div class="report-card">
 
-    html += `
-    <div style="text-align:center;margin-bottom:15px;">
-        <button class="print-btn" onclick="downloadPDF()">
-            📄 DOWNLOAD PDF ${total} ⭐
+        <h2>
+        ${stamp} STAR
+        </h2>
+
+        <div class="big">
+        ${currentData.length}
+        </div>
+
+        Total Peserta
+
+        <br><br>
+
+        <button class="download"
+        onclick="downloadPDF()">
+
+        📄 DOWNLOAD PDF
+
         </button>
-        <div style="margin-top:8px;color:white;">
-            Total Peserta : ${data.length}
-        </div>
+
     </div>
+
     `;
-
-    data.forEach(m => {
-
-        let stars = "";
-
-        for(let i=1;i<=8;i++){
-            stars += (i <= total ? "⭐" : "⚪");
-        }
-
-        html += `
-        <div class="voucher">
-
-            <h3>🚀 GALAXY PASSPORT</h3>
-
-            <div class="small">
-            16TH ANNIVERSARY<br>
-            BATU PARADISE
-            </div>
-
-            <hr>
-
-            <b>${m.passport}</b><br>
-            ${m.nama}<br>
-            ${m.hp}
-
-            <br><br>
-
-            <div class="stars">${stars}</div>
-
-            <br>
-
-            <div class="small">
-            Hubungi saat pengundian
-            </div>
-
-        </div>
-        `;
-
-    });
-
-    document.getElementById("area").innerHTML = html;
-
 }
 
 function downloadPDF(){
 
-    if(currentData.length === 0){
+    if(currentData.length==0){
+
         alert("Tidak ada data");
+
         return;
+
     }
 
-    const { jsPDF } = window.jspdf;
+    const { jsPDF } =
+    window.jspdf;
 
-    const doc = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: [330,210]
+    const doc =
+    new jsPDF({
+
+        orientation:"portrait",
+
+        unit:"mm",
+
+        format:[330,210]
+
     });
 
-    const voucherWidth = 50;
-    const voucherHeight = 60;
-
-    const startX = 5;
-    const startY = 5;
-
-    let x = startX;
-    let y = startY;
+    let x = 5;
+    let y = 15;
 
     let col = 0;
     let row = 0;
 
     currentData.forEach((m,index)=>{
 
-        doc.setLineWidth(0.5);
-        doc.rect(x,y,voucherWidth,voucherHeight);
+        doc.setDrawColor(0);
+        doc.rect(x,y,50,60);
 
-        doc.setFontSize(11);
-        doc.text("GALAXY PASSPORT",x+4,y+8);
+        doc.setFontSize(10);
+        doc.text(
+        "GALAXY PASSPORT",
+        x+5,
+        y+8
+        );
 
         doc.setFontSize(7);
-        doc.text("16TH ANNIVERSARY",x+4,y+14);
-        doc.text("BATU PARADISE",x+4,y+18);
 
-        doc.line(x+2,y+22,x+48,y+22);
+        doc.text(
+        "16TH ANNIVERSARY",
+        x+8,
+        y+13
+        );
+
+        doc.text(
+        "BATU PARADISE",
+        x+10,
+        y+17
+        );
+
+        doc.line(
+        x+2,
+        y+20,
+        x+48,
+        y+20
+        );
 
         doc.setFontSize(8);
 
-        doc.text("Passport",x+3,y+30);
-        doc.text(String(m.passport),x+3,y+35);
+        doc.text(
+        "Passport:",
+        x+3,
+        y+28
+        );
 
-        doc.text("Nama",x+3,y+43);
-        doc.text(String(m.nama),x+3,y+48);
+        doc.text(
+        String(m.passport),
+        x+20,
+        y+28
+        );
 
-        doc.text("HP",x+3,y+56);
-        doc.text(String(m.hp),x+3,y+61);
+        let nama =
+        String(m.nama);
 
-        let stars = "";
+        nama =
+        doc.splitTextToSize(
+        nama,
+        28
+        );
 
-        for(let i=1;i<=8;i++){
-            stars += (i <= currentTotal ? "*" : "o");
+        if(nama.length > 2){
+
+            nama =
+            nama.slice(0,2);
+
         }
 
-        doc.text(stars,x+3,y+68);
+        doc.text(
+        "Nama:",
+        x+3,
+        y+37
+        );
+
+        doc.text(
+        nama,
+        x+20,
+        y+37
+        );
+
+        doc.text(
+        "HP:",
+        x+3,
+        y+50
+        );
+
+        doc.text(
+        String(m.hp),
+        x+20,
+        y+50
+        );
+
+        doc.setFontSize(18);
+
+        doc.text(
+        currentStamp +
+        " STAMP",
+        x+10,
+        y+57
+        );
 
         col++;
 
-        if(col >= 4){
+        if(col>=4){
+
             col = 0;
+
             row++;
 
-            x = startX;
-            y += 65;
-        } else {
-            x += 52;
+            x = 5;
+
+            y += 60;
+
+        }else{
+
+            x += 50;
+
         }
 
-        if(row >= 5){
+        if(row>=5){
 
-            if(index < currentData.length - 1){
+            if(index <
+            currentData.length-1){
+
                 doc.addPage();
+
             }
 
-            x = startX;
-            y = startY;
-            col = 0;
             row = 0;
+            col = 0;
+
+            x = 5;
+            y = 15;
+
         }
 
     });
 
     doc.save(
-        "Voucher_" +
-        currentTotal +
-        "_Star.pdf"
+
+    "Voucher_" +
+    currentStamp +
+    "_Star.pdf"
+
     );
 
 }
